@@ -1,0 +1,5 @@
+.vscode/**
+.vscode-test/**
+.gitignore
+syntaxes/dae.tmLanguage.yaml
+*.vsix

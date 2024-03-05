@@ -1,0 +1,53 @@
+{
+  "name": "vscode-dae",
+  "type": "module",
+  "version": "0.0.1",
+  "displayName": "dae",
+  "description": "Langauge support for dae",
+  "categories": [
+    "Programming Languages"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "daeuniverse",
+    "email": "dae@v2raya.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daeuniverse/vscode-dae"
+  },
+  "homepage": "https://github.com/daeuniverse/vscode-dae",
+  "bugs": "https://github.com/daeuniverse/vscode-dae/issues",
+  "engines": {
+    "vscode": "^1.86.0"
+  },
+  "scripts": {
+    "dev": "nodemon --watch syntaxes/dae.tmLanguage.yaml --exec 'js-yaml syntaxes/dae.tmLanguage.yaml > syntaxes/dae.tmLanguage.json'"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0",
+    "nodemon": "^3.1.0",
+    "vsce": "^2.15.0"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "dae",
+        "aliases": [
+          "dae"
+        ],
+        "extensions": [
+          ".dae"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "dae",
+        "scopeName": "source.dae",
+        "path": "./syntaxes/dae.tmLanguage.json"
+      }
+    ]
+  }
+}

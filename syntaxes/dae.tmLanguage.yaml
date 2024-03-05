@@ -1,0 +1,101 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
+$schema: https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
+scopeName: source.dae
+fileTypes: [dae]
+name: dae
+
+patterns:
+  - include: '#expression'
+  - include: '#comment'
+
+# regex
+# source https://github.com/daeuniverse/dae-config-antlr4/blob/b902ba2bbaa84101efbf438978e0719efb1f1d43/dae_config.g4#L4-L18
+# ID [a-zA-Z_]([a-zA-Z_]|[/\\^*.+0-9-]|[=@$!#%])*
+# NON ID [/\\^*.+0-9-]([a-zA-Z_]|[/\\^*.+0-9-]|[=@$!#%])*
+
+repository:
+  # composable
+  bare_literal:
+    patterns:
+      - match: '[a-zA-Z_]([a-zA-Z_]|[/\\^*.+0-9-]|[=@$!#%])*'
+        name: string.other.id
+      - match: '[/\\^*.+0-9-]([a-zA-Z_]|[/\\^*.+0-9-]|[=@$!#%])*'
+        name: string.other.nonid
+  quote_literal:
+    patterns:
+      - match: '"(\"|.)*?"'
+        name: string.quoted.double
+      - match: "'(\\'|.)*?'"
+        name: string.quoted.single
+  literal:
+    patterns:
+      - include: '#bare_literal'
+      - include: '#quote_literal'
+    
+  # syntax
+  expression:
+    patterns:
+      - begin: ([a-zA-Z_]([a-zA-Z_]|[/\\^*.+0-9-]|[=@$!#%])*) {
+        beginCaptures:
+          1:
+            name: storage.type.struct
+        end: '}'
+        patterns:
+          - include: '$self'
+          - include: '#routing'
+          - include: '#parameter'
+          - include: '#comment'
+
+  routing:
+    patterns:
+      - include: '#function'
+      - match: ->
+        name: keyword.operator.to
+      - include: '#outbound'
+
+  function:
+    patterns:
+      - match: '&&'
+        name: keyword.operator.and
+      - include: '#annotation'
+      - begin: (!)?([a-zA-Z_]([a-zA-Z_]|[/\\^*.+0-9-]|[=@$!#%])*)\(
+        captures:
+          1:
+            name: keyword.operator.not
+          2:
+            name: entity.name.function
+        patterns:
+          - include: '#literal'
+        end: \)
+
+  outbound:
+    patterns:
+      - match: block|direct
+        name: keyword
+      - include: '#function'
+
+  annotation:
+    patterns:
+      - begin: \[
+        end: \]?$
+        patterns:
+          - include: '#parameter'
+
+  parameter:
+    patterns:
+      - begin: '([a-zA-Z_]([a-zA-Z_]|[/\\^*.+0-9-]|[=@$!#%])*): '
+        beginCaptures:
+          1:
+            name: variable.parameter
+        end: '$'
+        patterns:
+          - include: '#function'
+          - include: '#literal'
+      - include: '#literal'
+        
+  comment:
+    patterns:
+      - name: comment.line
+        match: '#(.*)'
+      - name: comment.block
+        match: /\*.*?\*/
