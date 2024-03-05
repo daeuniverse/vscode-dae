@@ -1,5 +1,5 @@
 {
-  "name": "vscode-dae",
+  "name": "dae",
   "type": "module",
   "version": "0.0.1",
   "displayName": "dae",
@@ -12,6 +12,7 @@
     "name": "daeuniverse",
     "email": "dae@v2raya.org"
   },
+  "publisher": "kecrily",
   "repository": {
     "type": "git",
     "url": "https://github.com/daeuniverse/vscode-dae"
@@ -25,9 +26,9 @@
     "dev": "nodemon --watch syntaxes/dae.tmLanguage.yaml --exec 'js-yaml syntaxes/dae.tmLanguage.yaml > syntaxes/dae.tmLanguage.json'"
   },
   "devDependencies": {
+    "@vscode/vsce": "^2.24.0",
     "js-yaml": "^4.1.0",
-    "nodemon": "^3.1.0",
-    "vsce": "^2.15.0"
+    "nodemon": "^3.1.0"
   },
   "contributes": {
     "languages": [
